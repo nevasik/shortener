@@ -1,0 +1,16 @@
+Команды для скачивания либ:
+    go get -u github.com/ilyakaznacheev/cleanenv
+    go get github.com/jackc/pgx/v4
+    go get github.com/go-chi/chi/v5
+    go get github.com/go-chi/render
+    go get "github.com/fatih/color"
+    go get github.com/go-playground/validator/v10
+    go get github.com/stretchr/testify/assert
+    go mod tidy
+
+Команды для миграций
+    migrate create -ext sql -dir database/migration/ -seq init_mg
+    up:
+        migrate -path database/migration/ -database "postgresql://username:secretkey@localhost:5432/database_name?sslmode=disable" -verbose up
+    down:
+        migrate -path database/migration/ -database "postgresql://username:secretkey@localhost:5432/database_name?sslmode=disable" -verbose down

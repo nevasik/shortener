@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+// Тесты для рандомных букв на проверку ожидаемых размеров с реальными и проверка на то, чтобы две строки были не равны
 func TestNewRandomString(t *testing.T) {
 	tests := []struct {
 		name string

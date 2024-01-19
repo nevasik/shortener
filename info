@@ -6,6 +6,8 @@
     go get "github.com/fatih/color"
     go get github.com/go-playground/validator/v10
     go get github.com/stretchr/testify/assert
+    go get "github.com/stretchr/testify/mock"
+    go get "github.com/stretchr/testify/require"
     go mod tidy
 
 Команды для миграций
@@ -14,3 +16,11 @@
         migrate -path database/migration/ -database "postgresql://username:secretkey@localhost:5432/database_name?sslmode=disable" -verbose up
     down:
         migrate -path database/migration/ -database "postgresql://username:secretkey@localhost:5432/database_name?sslmode=disable" -verbose down
+
+
+
+POST: http://localhost:8080/url
+{
+    "url": "http://poplaukhin_dima.com",
+    "alias": "dima.com"
+}

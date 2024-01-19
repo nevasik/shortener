@@ -3,8 +3,7 @@ package main
 import (
 	"Url-shortner/internal/config"
 	"Url-shortner/internal/http-server/handlers/url/save"
-	"Url-shortner/internal/lib/handlers/slogpretty"
-	"Url-shortner/internal/lib/slogger"
+	"Url-shortner/internal/lib/logger/slogger"
 	"Url-shortner/internal/storage/postgresql"
 	"fmt"
 	"github.com/go-chi/chi/v5"
@@ -17,7 +16,7 @@ import (
 func main() {
 	// init config: cleanenv
 	cnf := config.MustLoad()
-	log := setupLogger()
+	log := config.SetupLogger()
 
 	log.Info(
 		"starting url-shortener",
@@ -51,34 +50,15 @@ func main() {
 	server := &http.Server{
 		Addr:         cnf.Address,
 		Handler:      router,
-		ReadTimeout:  cnf.TimeOut, // время, за которое мы читаем с сервера ответ
-		WriteTimeout: cnf.TimeOut, // время, за которое мы отправляем ответ
+		ReadTimeout:  cnf.TimeOut, // время, за которое мы читаем запросы с сервера
+		WriteTimeout: cnf.TimeOut, // время, за которое мы отправляем ответ на сервер
 		IdleTimeout:  cnf.IdleTimeout,
 	}
 
-	err = server.ListenAndServe()
+	err = server.ListenAndServe() // сам запуск сервера
 	if err != nil {
 		log.Error("Failed to start server")
 	}
 
 	log.Error("Server stopped")
-}
-
-func setupLogger() *slog.Logger {
-	var log *slog.Logger
-
-	log = setupPrettySlog()
-	return log
-}
-
-func setupPrettySlog() *slog.Logger {
-	opts := slogpretty.PrettyHandlerOptions{
-		SlogOpts: &slog.HandlerOptions{
-			Level: slog.LevelDebug,
-		},
-	}
-
-	handler := opts.NewPrettyHandler(os.Stdout)
-
-	return slog.New(handler)
 }

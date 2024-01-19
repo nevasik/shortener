@@ -1,6 +1,8 @@
 package slogger
 
-import "log/slog"
+import (
+	"log/slog"
+)
 
 func Err(err error) slog.Attr {
 	return slog.Attr{

@@ -1,8 +1,9 @@
 package config
 
 import (
+	"Url-shortner/internal/lib/logger/handlers/slogpretty"
 	"github.com/ilyakaznacheev/cleanenv"
-	"golang.org/x/exp/slog"
+	"log/slog"
 	"os"
 	"time"
 )
@@ -42,4 +43,23 @@ func MustLoad() *Config {
 	}
 
 	return &cfg
+}
+
+func SetupLogger() *slog.Logger {
+	var log *slog.Logger
+
+	log = setupPrettySlog()
+	return log
+}
+
+func setupPrettySlog() *slog.Logger {
+	opts := slogpretty.PrettyHandlerOptions{
+		SlogOpts: &slog.HandlerOptions{
+			Level: slog.LevelDebug,
+		},
+	}
+
+	handler := opts.NewPrettyHandler(os.Stdout)
+
+	return slog.New(handler)
 }

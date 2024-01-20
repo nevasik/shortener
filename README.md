@@ -24,7 +24,8 @@ The project uses migrations to manage the database structure. You can run migrat
 go
 Copy code
 ```bash
-go run migrate.go
+migrate create -ext sql -dir database/migration/ -seq init_mg
+migrate -path database/migration/ -database "postgresql://username:secretkey@localhost:5432/database_name?sslmode=disable" -verbose up
 ```
 Running the Application
 Execute the following command to run the application:

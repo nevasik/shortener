@@ -45,6 +45,20 @@ func (s *Storage) SaveURL(urlToSave string, alias string) (int64, error) {
 	return id, nil
 }
 
+// получение урла из базы по алиасу
+func (s *Storage) GetURL(alias string) (string, error) {
+	op := "storage.postgresql.GetURLByAlias"
+	var url string
+
+	err := s.db.QueryRow("SELECT url FROM url WHERE alias = $1", alias).Scan(&url)
+
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", op, err)
+	}
+
+	return url, nil
+}
+
 // получение урла из базы данных по id
 func (s *Storage) GetURLById(id int64) (string, error) {
 	op := "storage.postgresql.GetURL"
@@ -56,20 +70,6 @@ func (s *Storage) GetURLById(id int64) (string, error) {
 		if errors.Is(err, sql.ErrNoRows) {
 			return "", storage.ErrUrlNotFound
 		}
-		return "", fmt.Errorf("%s: %w", op, err)
-	}
-
-	return url, nil
-}
-
-// получение урла из базы данных по алиасу
-func (s *Storage) GetURLByAlias(alias string) (string, error) {
-	op := "storage.postgresql.GetURLByAlias"
-	var url string
-
-	err := s.db.QueryRow("SELECT url FROM url WHERE alias = $1", alias).Scan(&url)
-
-	if err != nil {
 		return "", fmt.Errorf("%s: %w", op, err)
 	}
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"Url-shortner/internal/config"
+	"Url-shortner/internal/http-server/handlers/redirect"
 	"Url-shortner/internal/http-server/handlers/url/save"
 	"Url-shortner/internal/lib/logger/slogger"
 	"Url-shortner/internal/storage/postgresql"
@@ -42,6 +43,7 @@ func main() {
 	router.Use(middleware.URLFormat) // чтобы в приложении были красивые URL
 
 	router.Post("/url", save.New(log, storage))
+	router.Get("/{alias}", redirect.New(log, storage))
 
 	fmt.Println()
 	log.Info("starting server", slog.String("address", cnf.Address))
